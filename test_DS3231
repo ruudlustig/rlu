@@ -1,0 +1,37 @@
+// show aging
+#include <Wire.h>
+char I2C_data;
+char I2C_data2;
+char I2C_address_RTC = 0x68;
+char I2C_address_EEPROM = 0x56;
+int aging;
+int nbr;
+int control_reg;
+
+void setup()
+{
+  Serial.begin(9600);
+  //Serial.println(I2C_address_RTC, HEX);
+  Wire.begin();
+  // select aging register
+  Wire.beginTransmission(I2C_address_RTC);
+  Wire.write(0x10); // select aging register
+  Wire.requestFrom(I2C_address_RTC, 1);
+  //delay(20);
+  nbr = Wire.available();
+  if (nbr > 0) {
+    I2C_data = Wire.read();
+    aging = I2C_data;
+  }
+  
+  Wire.endTransmission();
+
+}
+void loop()
+{
+  delay(2000);
+  Serial.println(aging);
+
+}
+
+
